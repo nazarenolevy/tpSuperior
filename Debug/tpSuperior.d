@@ -1,0 +1,1 @@
+tpSuperior.d: ../tpSuperior.c
