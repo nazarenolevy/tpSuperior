@@ -34,6 +34,8 @@ float **borrarPar(float **matrizDePares, int* cantidadDePares, int i);
 
 float **buscarYBorrarPar(float** matrizDePares, int *cantidadDePares);
 
+int buscarX(int x, float** matrizDePares, int cantidadDePares);
+
 
 //TODO Ver los casos de la division por 0
 //TODO Ver el caso de los coeficientes iguales a 0
@@ -137,10 +139,16 @@ float **ingresarPares(int *cantidadDePares){
            printf("Ingrese la componente Y: ");
            scanf("%f", &y);
 
+           int encontrado = buscarX(x, matrizDePares, temp);
+
+           if(encontrado == NO){
            matrizDePares[i][0] = x;
            matrizDePares[i][1] = y;
 
            i++;
+           }else
+        	   printf("ERROR: ya se ingreso dicho valor de X, por favor ingrese otro\n\n");
+
        }
 
        *cantidadDePares = temp;
@@ -241,11 +249,12 @@ void mostrarPolinomios(int cantidadDePares, float *vectorDeCoeficientesPro, floa
     int primeraVez = SI;
     while( i < cantidadDePares )
     {
-           if(primeraVez == SI)
+           if(primeraVez == SI && vectorDeCoeficientesPro[i] != 0)
            {
+
                          printf("%.2f", vectorDeCoeficientesPro[i]);
                          primeraVez = NO;
-           }else
+           }else if(vectorDeCoeficientesPro[i] != 0)
            {
 
                 printf(" + ");
@@ -271,11 +280,11 @@ void mostrarPolinomios(int cantidadDePares, float *vectorDeCoeficientesPro, floa
     primeraVez = SI;
     while( i < cantidadDePares )
     {
-           if(primeraVez == SI)
+           if(primeraVez == SI && vectorDeCoeficientesReg[i] != 0)
            {
                          printf("%.2f", vectorDeCoeficientesReg[i]);
                          primeraVez = NO;
-           }else
+           }else if(vectorDeCoeficientesReg[i] != 0)
            {
 
                 printf(" + ");
@@ -362,23 +371,30 @@ void menuPrincipal(float **matrizDePares, int cantidadDePares, float* vectorDeCo
                                                 case 1:
                                                      {
                                                               float x, y;
+                                                              int encontrado = NO;
 
 
+                                                             cantidadDePares++;
+
+															 matrizDePares = (float **) realloc(matrizDePares, cantidadDePares * sizeof(float *));
+
+
+															 for(i=0; i < cantidadDePares; i++){
+															 matrizDePares[i] = (float *) realloc( matrizDePares[i], (cantidadDePares + 1) * sizeof(float));
+															 }
+
+                                                              do{
                                                               printf("Ingrese el nuevo par...\n");
                                                               printf("Componente X: ");
                                                               scanf("%f", &x);
                                                               printf("Componente Y: ");
                                                               scanf("%f", &y);
 
-                                                              cantidadDePares++;
-
-                                                              matrizDePares = (float **) realloc(matrizDePares, cantidadDePares * sizeof(float *));
 
 
-                                                              for(i=0; i < cantidadDePares; i++){
-                                                              matrizDePares[i] = (float *) realloc( matrizDePares[i], (cantidadDePares + 1) * sizeof(float));
-                                                              }
+                                                              encontrado = buscarX(x, matrizDePares, cantidadDePares-1);
 
+                                                              if(encontrado == NO){
                                                               matrizDePares[cantidadDePares - 1][0] = x;
                                                               matrizDePares[cantidadDePares - 1][1] = y;
 
@@ -392,7 +408,10 @@ void menuPrincipal(float **matrizDePares, int cantidadDePares, float* vectorDeCo
 
                                                               vectorDeCoeficientesReg = coeficientesReg(cantidadDePares, matrizDePares);
 
+                                                              }else
+                                                            	  printf("ERROR: ya se ingreso dicho valor de X, por favor ingrese otro\n\n");
 
+                                                              }while(encontrado == SI);
 
                                                               break;
                                                      }
@@ -625,4 +644,20 @@ float **borrarPar(float **matrizDePares, int* cantidadDePares, int i){
 
 	return matrizDePares;
 
+}
+
+int buscarX(int x, float** matrizDePares, int cantidadDePares){
+	int i = 0;
+	int encontrado = NO;
+
+	while(i < cantidadDePares && encontrado == NO)
+	{
+		if( matrizDePares[i][0] == x)
+			encontrado = SI;
+		else
+			i++;
+
+	}
+
+	return encontrado;
 }
