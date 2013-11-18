@@ -1,10 +1,3 @@
-/*
- * tpSuperior.c
- *
- *  Created on: 31/10/2013
- *      Author: Naza
- */
-
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -41,6 +34,7 @@ int buscarX(int x, float** matrizDePares, int cantidadDePares);
 //TODO Ver el caso de los coeficientes iguales a 0
 
 
+int cantidadDecimales = 0;
 
 int main(void)
 {
@@ -59,6 +53,9 @@ int main(void)
      matrizDePares = burbuja(cantidadDePares, matrizDePares);
 
 
+     //cantidad de decimales
+     printf("Por favor, ingrese la cantidad de decimales: ");
+     scanf("%d", &cantidadDecimales);
 
 
     //completando la matriz con las diferencias
@@ -238,7 +235,6 @@ float *coeficientesReg(int cantidadDePares, float **matrizDePares)
 
 void mostrarPolinomios(int cantidadDePares, float *vectorDeCoeficientesPro, float *vectorDeCoeficientesReg, float **matrizDePares){
 
-    //TODO system("cls");
     system("clear");
     printf("Polinomio Progresivo\n");
     printf("P(X) = ");
@@ -252,25 +248,27 @@ void mostrarPolinomios(int cantidadDePares, float *vectorDeCoeficientesPro, floa
            if(primeraVez == SI && vectorDeCoeficientesPro[i] != 0)
            {
 
-                         printf("%.2f", vectorDeCoeficientesPro[i]);
+                         printf("%.*f", cantidadDecimales, vectorDeCoeficientesPro[i]);
                          primeraVez = NO;
            }else if(vectorDeCoeficientesPro[i] != 0)
            {
 
                 printf(" + ");
-                printf("%.2f", vectorDeCoeficientesPro[i]);
+                printf("%.*f",cantidadDecimales, vectorDeCoeficientesPro[i]);
 
                 int n = 0;
                 while( n < i )
                 {
                 printf(" x ");
-                printf("(X - %1.f)", matrizDePares[n][0]);
+                printf("(X - %.*f)",cantidadDecimales, matrizDePares[n][0]);
                 n++;
                 }
            }
 
            i++;
     }
+
+    printf("\n\n Grado del polinomio: %d", i-1);
 
 
     i = 0;
@@ -282,20 +280,20 @@ void mostrarPolinomios(int cantidadDePares, float *vectorDeCoeficientesPro, floa
     {
            if(primeraVez == SI && vectorDeCoeficientesReg[i] != 0)
            {
-                         printf("%.2f", vectorDeCoeficientesReg[i]);
+                         printf("%.*f",cantidadDecimales, vectorDeCoeficientesReg[i]);
                          primeraVez = NO;
            }else if(vectorDeCoeficientesReg[i] != 0)
            {
 
                 printf(" + ");
-                printf("%.2f", vectorDeCoeficientesReg[i]);
+                printf("%.*f",cantidadDecimales, vectorDeCoeficientesReg[i]);
 
                 int n = 0;
                 int aux = cantidadDePares - 1;
                 while( n < i )
                 {
                 printf(" x ");
-                printf("(X - %1.f)", matrizDePares[aux][0]);
+                printf("(X - %.*f)",cantidadDecimales, matrizDePares[aux][0]);
                 n++;
                 aux--;
                 }
@@ -304,7 +302,13 @@ void mostrarPolinomios(int cantidadDePares, float *vectorDeCoeficientesPro, floa
            i++;
     }
 
+
+    printf("\n\n Grado del polinomio: %d", i-1);
     printf("\n\n");
+
+    printf("Se trabajo con %d pares ordenados", cantidadDePares);
+
+
 }
 
 void menuPrincipal(float **matrizDePares, int cantidadDePares, float* vectorDeCoeficientesPro, float* vectorDeCoeficientesReg,int *volverAEmpezar)
@@ -322,8 +326,8 @@ void menuPrincipal(float **matrizDePares, int cantidadDePares, float* vectorDeCo
     printf("4. Salir\n\n");
     printf("Opcion: ");
     scanf("%d", &opcion);
-    //TODO system("cls");
     system("clear");
+
 
 
     switch(opcion)
@@ -345,12 +349,12 @@ void menuPrincipal(float **matrizDePares, int cantidadDePares, float* vectorDeCo
                                   int volverAlMenu = NO;
                                   while(volverAlMenu == NO)
                                   {
-                                  printf("Pares Ordenados:\n");
+                                  printf("\n\nPares Ordenados:\n");
                                   int i;
                                   i = 0;
                                   while(i < cantidadDePares)
                                   {
-                                  printf("X= %.2f Y= %.2f\n", matrizDePares[i][0], matrizDePares[i][1]);
+                                  printf("X= %.*f Y= %.*f\n",cantidadDecimales, matrizDePares[i][0], cantidadDecimales, matrizDePares[i][1]);
                                   i++;
                                   }
 
@@ -362,8 +366,8 @@ void menuPrincipal(float **matrizDePares, int cantidadDePares, float* vectorDeCo
                                   printf("4. Volver al Menu Principal\n\n");
                                   printf("Opcion: ");
                                   scanf("%d", &opcion2);
-                                  //TODO system("cls");
-                                  system("clear");
+
+
 
 
                                   switch(opcion2)
@@ -389,6 +393,8 @@ void menuPrincipal(float **matrizDePares, int cantidadDePares, float* vectorDeCo
                                                               scanf("%f", &x);
                                                               printf("Componente Y: ");
                                                               scanf("%f", &y);
+
+                                                              system("clear");
 
 
 
@@ -423,7 +429,7 @@ void menuPrincipal(float **matrizDePares, int cantidadDePares, float* vectorDeCo
 														i = 0;
 														while(i < cantidadDePares)
 														{
-														printf("X= %.2f Y= %.2f\n", matrizDePares[i][0], matrizDePares[i][1]);
+														printf("X= %.*f Y= %.*f\n",cantidadDecimales, matrizDePares[i][0],cantidadDecimales, matrizDePares[i][1]);
 														i++;
                                                     	}
 
@@ -438,6 +444,7 @@ void menuPrincipal(float **matrizDePares, int cantidadDePares, float* vectorDeCo
 
 
 														 vectorDeCoeficientesReg = coeficientesReg(cantidadDePares, matrizDePares);
+
 
 
                                                               break;
@@ -472,8 +479,8 @@ void menuPrincipal(float **matrizDePares, int cantidadDePares, float* vectorDeCo
                             case 3:
                                  {
                                         *volverAEmpezar = SI;
-                                        //TODO system("cls");
                                         system("clear");
+
                                         break;
                                  }
                             case 4:
@@ -574,8 +581,8 @@ void calcularPolinomio(int cantidadDePares, float* vectorDeCoeficientesPro, floa
 
                                           //printf de ambos resultados
 
-                                          printf("Resultado en el polinomio Progresivo: P(%.2f) = %.2f\n", punto, resultadoPro);
-                                          printf("Resultado en el polinomio Regresivo: P(%.2f) = %.2f\n", punto, resultadoReg);
+                                          printf("Resultado en el polinomio Progresivo: P(%.*f) = %.*f\n",cantidadDecimales, punto,cantidadDecimales, resultadoPro);
+                                          printf("Resultado en el polinomio Regresivo: P(%.*f) = %.*f\n",cantidadDecimales, punto,cantidadDecimales, resultadoReg);
 }
 
 
@@ -599,8 +606,11 @@ float **buscarYBorrarPar(float** matrizDePares, int *cantidadDePares){
 			i++;
 	}
 
-	if(encontrado)
+	if(encontrado){
 		matrizDePares = borrarPar(matrizDePares, &temp, i);
+		system("clear");
+	}else
+		printf("\n\n\n ERROR: No existe el par ingresado\n\n\n");
 
 
 	*cantidadDePares = temp;
